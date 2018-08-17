@@ -37,9 +37,9 @@ $(document).ready(function() {
     let $daysAgo = $("<p>").text(`${dateDifference} days ago`);
 
     let $icons = $("<div>").addClass("icons");
-    let $flag = $("<i>").addClass("fas fa-flag");
+    let $flag = $("<i>").addClass("far fa-flag");
     let $retweet = $("<i>").addClass("fas fa-retweet");
-    let $heart = $("<i>").addClass("fas fa-heart");
+    let $heart = $("<i>").addClass("far fa-heart").data("likes", tweetData.like);
 
     $header.append($img);
     $header.append($userName);

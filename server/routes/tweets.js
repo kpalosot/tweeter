@@ -40,6 +40,23 @@ module.exports = function(DataHelpers) {
       }
     });
   });
+  tweetsRoutes.put("/:id/like", function(req, res){
+    const tweetId = req.params.id;
+    const filter = { id: Mongo.ObjectId(id)};
+    const tweetModifiers = {
+      tweetId: tweetId,
+      filter: filter
+    };
+
+    DataHelpers.addLike(tweetModifiers, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message});
+      } else {
+        res.status.send();
+      }
+    };
+
+  });
 
   return tweetsRoutes;
 

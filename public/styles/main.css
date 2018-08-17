@@ -126,7 +126,7 @@ article.tweet footer > i {
 article.tweet :hover {
   opacity: 1; }
 
-article.tweet :hover .icons {
+article.tweet:hover .icons {
   visibility: visible; }
 
 header > img {
