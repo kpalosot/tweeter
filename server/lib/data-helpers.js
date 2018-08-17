@@ -25,9 +25,11 @@ module.exports = function makeDataHelpers(db) {
     },
 
     addLike: function(tweetModifier, callback){
-      db.collection("tweets").updateOne(tweetModifier.filter. (err,res) => {
-        if (err) throw err;
-        callback(null, tweets.sort(sortNewestFirst))
+      db.collection("tweets")
+      .updateOne(tweetModifier.filter,
+        {"$set": tweetModifier.updateValue}, (err,res) => {
+          if (err) throw err;
+          callback(null, tweets.sort(sortNewestFirst))
       });
     }
 

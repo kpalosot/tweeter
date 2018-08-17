@@ -24,7 +24,7 @@ $(document).ready(function() {
   function createTweetElement(tweetData){
     let dateDifference = calculateDateStamp(tweetData.created_at);
 
-    let $article = $("<article>").addClass("tweet");
+    let $article = $("<article>").addClass("tweet").data("tweetID", tweetData._id);
 
     let $header = $("<header>");
     let $img = $("<img>").attr("src", tweetData.user.avatars.small);
@@ -39,7 +39,11 @@ $(document).ready(function() {
     let $icons = $("<div>").addClass("icons");
     let $flag = $("<i>").addClass("far fa-flag");
     let $retweet = $("<i>").addClass("fas fa-retweet");
-    let $heart = $("<i>").addClass("far fa-heart").data("likes", tweetData.like);
+    let $heart = $("<i>").addClass("far fa-heart");
+
+    if (tweetData.likes > 0) {
+      $heart.text(tweetData.likes);
+    }
 
     $header.append($img);
     $header.append($userName);
