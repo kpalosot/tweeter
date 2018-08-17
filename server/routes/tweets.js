@@ -46,22 +46,18 @@ module.exports = function(DataHelpers) {
     const tweetId = req.body.id;
     let tweetLikes = parseInt(req.body.likes, 10);
     tweetLikes++;
-
-    const updateValue = {
-      likes: tweetLikes
-    }
-    const filter = { id: Mongo.ObjectId(id)};
+    console.log("tweetsRoutes tweetLikes:", tweetLikes);
 
     const tweetModifiers = {
-      filter: filter,
-      updateValue: updateValue
+      id: tweetId,
+      likes: tweetLikes
     };
 
     DataHelpers.addLike(tweetModifiers, (err) => {
       if (err) {
         res.status(500).json({ error: err.message});
       } else {
-        res.status.send();
+        res.status(201).send();
       }
     });
 

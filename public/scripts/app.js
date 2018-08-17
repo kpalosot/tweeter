@@ -24,7 +24,7 @@ $(document).ready(function() {
   function createTweetElement(tweetData){
     let dateDifference = calculateDateStamp(tweetData.created_at);
 
-    let $article = $("<article>").addClass("tweet").data("tweetID", tweetData._id);
+    let $article = $("<article>").addClass("tweet");
 
     let $header = $("<header>");
     let $img = $("<img>").attr("src", tweetData.user.avatars.small);
@@ -39,7 +39,7 @@ $(document).ready(function() {
     let $icons = $("<div>").addClass("icons");
     let $flag = $("<i>").addClass("far fa-flag");
     let $retweet = $("<i>").addClass("fas fa-retweet");
-    let $heart = $("<i>").addClass("far fa-heart");
+    let $heart = $("<i>").addClass("far fa-heart").data("tweetID", tweetData._id);
 
     if (tweetData.likes > 0) {
       $heart.text(tweetData.likes);
@@ -109,6 +109,29 @@ $(document).ready(function() {
       }
     });
   });
+
+  $(".tweets-container").click(function(event){
+
+    console.log($(event.target).data("tweetID"));
+    const tweetID = $(event.target).data("tweetID");
+    const tweetLikes = $(event.target).val() ? $(event.target).val() : 0;
+    console.log("tweets-container tweelLikes:", tweetLikes);
+    $.ajax({
+      type: "PUT",
+      url: "/tweets/like",
+      data: {
+        id: tweetID,
+        likes: tweetLikes
+
+      }
+    }).done(function (message){
+      console.log(message);
+    });
+
+
+
+  });
+
 
   loadTweets();
 

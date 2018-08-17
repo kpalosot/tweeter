@@ -1,7 +1,8 @@
 "use strict";
 
 // Simulates the kind of delay we see with network or filesystem operations
-const simulateDelay = require("./util/simulate-delay");
+// const simulateDelay = require("./util/simulate-delay");
+const Mongo = require("mongodb");
 
 // Defines helper functions for saving and getting tweets, using the database `db`
 module.exports = function makeDataHelpers(db) {
@@ -25,12 +26,16 @@ module.exports = function makeDataHelpers(db) {
     },
 
     addLike: function(tweetModifier, callback){
-      db.collection("tweets")
-      .updateOne(tweetModifier.filter,
-        {"$set": tweetModifier.updateValue}, (err,res) => {
-          if (err) throw err;
-          callback(null, tweets.sort(sortNewestFirst))
+      const filter = { _id: Mongo.ObjectId(tweetModifier.id)};
+      const newValues = {$set: {likes: tweetModifier.likes}};
+
+      // 5b7734293bbc58240ff5461b
+
+      db.collection("tweets").updateOne(filter, newValues, function(err, res){
+        if (err) throw err;
+        callback(null, true);
       });
+
     }
 
   };
