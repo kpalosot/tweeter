@@ -18,7 +18,6 @@ app.use(express.static("public"));
 // const db = require("./lib/in-memory-db");
 
 /* Getting database */
-// var db;
 
 MongoClient.connect(MONGODB_URI, (err, db) => {
   if (err){

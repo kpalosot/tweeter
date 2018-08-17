@@ -61,9 +61,6 @@ $(document).ready(function() {
   }
 
   function renderTweets(data){
-    /*data.sort((first, second)=>{
-      return second.created_at - first.created_at;
-    });*/
     data.forEach((item) => {
       let $tweet = createTweetElement(item);
       $(".tweets-container").append($tweet);
