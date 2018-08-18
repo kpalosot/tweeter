@@ -29,8 +29,6 @@ module.exports = function makeDataHelpers(db) {
       const filter = { _id: Mongo.ObjectId(tweetModifier.id)};
       const newValues = {$set: {likes: tweetModifier.likes}};
 
-      // 5b7734293bbc58240ff5461b
-
       db.collection("tweets").updateOne(filter, newValues, function(err, res){
         if (err) throw err;
         callback(null, true);

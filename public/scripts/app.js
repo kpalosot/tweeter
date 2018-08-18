@@ -91,15 +91,17 @@ $(document).ready(function() {
     const tweetValidation = validateForm($(this).children("textarea").val());
 
     if(!tweetValidation){
-      $.post("/tweets", $(this).serialize())
-        .done($(this).children("textarea").val(""))
-        .done($(this).children(".counter").text("140"))
-        .done($(".tweet").remove())
-        .done($(this).siblings(".is_error").text(tweetValidation).slideUp())
-        .done(loadTweets);
+      $.post("/tweets", $(this).serialize(), function(tweet){
+        let $newTweet = createTweetElement(tweet);
+        $(".tweets-container").prepend($newTweet);
+        })
+      .done($(this).children("textarea").val(""))
+      .done($(this).children(".counter").text("140"))
+      .done($(this).siblings(".is_error").text("").slideUp());
     } else {
       $(this).siblings(".is_error").text(tweetValidation).slideDown();
     }
+
   });
 
   $("#compose").on("click", function(){
@@ -111,22 +113,33 @@ $(document).ready(function() {
   });
 
   $(".tweets-container").click(function(event){
+    let $likeButton = $(event.target);
+    const tweetID = $likeButton.data("tweetID");
+    const tweetLikes = $likeButton.text() ? $likeButton.text() : 0;
+    // if($likeButton.hasClass("far")){
+      $.ajax({
+        type: "PUT",
+        url: "/tweets/like",
+        data: {
+          id: tweetID,
+          likes: tweetLikes
+        }
+      }).done(function(){
+        $likeButton.removeClass("far").addClass("fas");
+      });
+    // } else {
+    //   $.ajax({
+    //     type: "DELETE",
+    //     url: "/tweets/unlike",
+    //     data: {
+    //       id: tweetID,
+    //       likes: tweetLikes
+    //     }
+    //   }).done(function(){
+    //     $likeButton.removeClass("far").addClass("fas");
+    //   });
+    }
 
-    console.log($(event.target).data("tweetID"));
-    const tweetID = $(event.target).data("tweetID");
-    const tweetLikes = $(event.target).val() ? $(event.target).val() : 0;
-    console.log("tweets-container tweelLikes:", tweetLikes);
-    $.ajax({
-      type: "PUT",
-      url: "/tweets/like",
-      data: {
-        id: tweetID,
-        likes: tweetLikes
-
-      }
-    }).done(function (message){
-      console.log(message);
-    });
 
 
 
