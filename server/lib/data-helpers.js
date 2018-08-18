@@ -25,7 +25,7 @@ module.exports = function makeDataHelpers(db) {
 
     },
 
-    addLike: function(tweetModifier, callback){
+    modifyLike: function(tweetModifier, callback){
       const filter = { _id: Mongo.ObjectId(tweetModifier.id)};
       const newValues = {$set: {likes: tweetModifier.likes}};
 
@@ -35,7 +35,6 @@ module.exports = function makeDataHelpers(db) {
       });
 
     }
-
   };
 };
 

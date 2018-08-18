@@ -44,15 +44,15 @@ module.exports = function(DataHelpers) {
 
   tweetsRoutes.put("/like", function(req, res){
     const tweetId = req.body.id;
-    let tweetLikes = Number(req.body.likes);
-    tweetLikes++;
+    let tweetLikes = req.body.likes;
+    // tweetLikes++;
 
     const tweetModifiers = {
       id: tweetId,
       likes: tweetLikes
     };
 
-    DataHelpers.addLike(tweetModifiers, (err) => {
+    DataHelpers.modifyLike(tweetModifiers, (err) => {
       if (err) {
         res.status(500).json({ error: err.message});
       } else {
@@ -60,6 +60,25 @@ module.exports = function(DataHelpers) {
       }
     });
 
+  });
+
+  tweetsRoutes.delete("/unlike", function (req, res){
+    const tweetId = req.body.id;
+    let tweetLikes = req.body.likes;
+    // tweetLikes--;
+
+    const tweetModifiers = {
+      id: tweetId,
+      likes: tweetLikes
+    };
+
+    DataHelpers.modifyLike(tweetModifiers, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message});
+      } else {
+        res.status(201).send();
+      }
+    });
   });
 
   return tweetsRoutes;

@@ -115,8 +115,9 @@ $(document).ready(function() {
   $(".tweets-container").click(function(event){
     let $likeButton = $(event.target);
     const tweetID = $likeButton.data("tweetID");
-    const tweetLikes = $likeButton.text() ? $likeButton.text() : 0;
-    // if($likeButton.hasClass("far")){
+    let tweetLikes = $likeButton.text() ? Number($likeButton.text()) : 0;
+    if($likeButton.hasClass("far")){
+      tweetLikes++;
       $.ajax({
         type: "PUT",
         url: "/tweets/like",
@@ -126,18 +127,24 @@ $(document).ready(function() {
         }
       }).done(function(){
         $likeButton.removeClass("far").addClass("fas");
+      }).done($likeButton.text(tweetLikes));
+    } else {
+      tweetLikes--;
+      $.ajax({
+        type: "DELETE",
+        url: "/tweets/unlike",
+        data: {
+          id: tweetID,
+          likes: tweetLikes
+        }
+      }).done(function(){
+        $likeButton.removeClass("fas").addClass("far");
+      }).done(function(){
+        if(tweetLikes === 0){
+          tweetLikes = "";
+        }
+        $likeButton.text(tweetLikes)
       });
-    // } else {
-    //   $.ajax({
-    //     type: "DELETE",
-    //     url: "/tweets/unlike",
-    //     data: {
-    //       id: tweetID,
-    //       likes: tweetLikes
-    //     }
-    //   }).done(function(){
-    //     $likeButton.removeClass("far").addClass("fas");
-    //   });
     }
 
 
