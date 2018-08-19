@@ -37,9 +37,13 @@ $(document).ready(function() {
     let $daysAgo = $("<p>").text(`${dateDifference} days ago`);
 
     let $icons = $("<div>").addClass("icons");
-    let $flag = $("<i>").addClass("fas fa-flag");
+    let $flag = $("<i>").addClass("far fa-flag");
     let $retweet = $("<i>").addClass("fas fa-retweet");
-    let $heart = $("<i>").addClass("fas fa-heart");
+    let $heart = $("<i>").addClass("far fa-heart").data("tweetID", tweetData._id);
+
+    if (tweetData.likes > 0) {
+      $heart.text(tweetData.likes);
+    }
 
     $header.append($img);
     $header.append($userName);
@@ -87,15 +91,17 @@ $(document).ready(function() {
     const tweetValidation = validateForm($(this).children("textarea").val());
 
     if(!tweetValidation){
-      $.post("/tweets", $(this).serialize())
-        .done($(this).children("textarea").val(""))
-        .done($(this).children(".counter").text("140"))
-        .done($(".tweet").remove())
-        .done($(this).siblings(".is_error").text(tweetValidation).slideUp())
-        .done(loadTweets);
+      $.post("/tweets", $(this).serialize(), function(tweet){
+        let $newTweet = createTweetElement(tweet);
+        $(".tweets-container").prepend($newTweet);
+        })
+      .done($(this).children("textarea").val(""))
+      .done($(this).children(".counter").text("140"))
+      .done($(this).siblings(".is_error").text("").slideUp());
     } else {
       $(this).siblings(".is_error").text(tweetValidation).slideDown();
     }
+
   });
 
   $("#compose").on("click", function(){
@@ -105,6 +111,47 @@ $(document).ready(function() {
       }
     });
   });
+
+  $(".tweets-container").click(function(event){
+    let $likeButton = $(event.target);
+    const tweetID = $likeButton.data("tweetID");
+    let tweetLikes = $likeButton.text() ? Number($likeButton.text()) : 0;
+    if($likeButton.hasClass("far")){
+      tweetLikes++;
+      $.ajax({
+        type: "PUT",
+        url: "/tweets/like",
+        data: {
+          id: tweetID,
+          likes: tweetLikes
+        }
+      }).done(function(){
+        $likeButton.removeClass("far").addClass("fas");
+      }).done($likeButton.text(tweetLikes));
+    } else {
+      tweetLikes--;
+      $.ajax({
+        type: "DELETE",
+        url: "/tweets/unlike",
+        data: {
+          id: tweetID,
+          likes: tweetLikes
+        }
+      }).done(function(){
+        $likeButton.removeClass("fas").addClass("far");
+      }).done(function(){
+        if(tweetLikes === 0){
+          tweetLikes = "";
+        }
+        $likeButton.text(tweetLikes)
+      });
+    }
+
+
+
+
+  });
+
 
   loadTweets();
 

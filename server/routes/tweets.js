@@ -29,12 +29,52 @@ module.exports = function(DataHelpers) {
       content: {
         text: req.body.text
       },
-      created_at: Date.now()
+      created_at: Date.now(),
+      likes: 0
     };
 
     DataHelpers.saveTweet(tweet, (err) => {
       if (err) {
         res.status(500).json({ error: err.message });
+      } else {
+        res.status(200).json(tweet);
+      }
+    });
+  });
+
+  tweetsRoutes.put("/like", function(req, res){
+    const tweetId = req.body.id;
+    let tweetLikes = req.body.likes;
+    // tweetLikes++;
+
+    const tweetModifiers = {
+      id: tweetId,
+      likes: tweetLikes
+    };
+
+    DataHelpers.modifyLike(tweetModifiers, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message});
+      } else {
+        res.status(201).send();
+      }
+    });
+
+  });
+
+  tweetsRoutes.delete("/unlike", function (req, res){
+    const tweetId = req.body.id;
+    let tweetLikes = req.body.likes;
+    // tweetLikes--;
+
+    const tweetModifiers = {
+      id: tweetId,
+      likes: tweetLikes
+    };
+
+    DataHelpers.modifyLike(tweetModifiers, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message});
       } else {
         res.status(201).send();
       }
