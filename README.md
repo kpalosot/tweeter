@@ -2,6 +2,12 @@
 
 Tweeter is a simple, single-page Twitter clone.
 
+## Final Product
+!["Post tweet"](https://github.com/kpalosot/tweeter/blob/master/docs/Post_tweet.png?raw=true)
+!["Tweet box hidden"](https://github.com/kpalosot/tweeter/blob/master/docs/Hide_text_box.png?raw=true)
+!["Invalid - No text"](https://github.com/kpalosot/tweeter/blob/master/docs/Invalid_no_text.png?raw=true)
+!["Invalid - Text longer than 140 characters"](https://github.com/kpalosot/tweeter/blob/master/docs/Invalid_long_text.png?raw=true)
+
 ## Features
 - Can create a new tweet with a randomly generate user information.
 - Can toggle the "Compose Tweet" box to hide and reappear. On reappearance, text area will be focused and any prior text still exists.
