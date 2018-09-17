@@ -7,8 +7,7 @@ $(document).ready(function() {
 
   // code snippet from https://gist.github.com/flangofas/714f401b63a1c3d84aaa
   function calculateDateStamp(milliseconds) {
-    let today = new Date().getTime();
-    let timeDifference = today - new Date(milliseconds).getTime();
+    let timeDifference = Date.now() - milliseconds;
 
     let days, total_hours, total_minutes, total_seconds;
 
@@ -17,7 +16,7 @@ $(document).ready(function() {
     total_hours = parseInt(Math.floor(total_minutes / 60));
     days = parseInt(Math.floor(total_hours / 24));
 
-    return days;
+    return days < 0 ? 0 : days;
 
   }
 
